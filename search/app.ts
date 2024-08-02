@@ -49,7 +49,7 @@ export async function lambdaHandler(event: APIGatewayProxyEvent): Promise<APIGat
         const formatedData = {
             results: data.map((row) => ({
                 product: row['product_name'],
-                supermarket: row['supermarket_nam'],
+                supermarket: row['supermarket_name'],
                 address: row['address'],
                 distance: row['distance'],
                 price: row['price'],
