@@ -27,7 +27,7 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /products
-            Method: get
+            Method: post
     Metadata: # Manage esbuild properties
       BuildMethod: esbuild
       BuildProperties:
@@ -36,3 +36,7 @@ Resources:
         Sourcemap: true
         EntryPoints:
           - app.ts
+Outputs:
+  ProductsApi:
+    Description: "API Gateway endpoint URL for prod stage for SearchProductsFunction"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/products/"
