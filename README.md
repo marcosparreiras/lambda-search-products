@@ -14,7 +14,7 @@ git clone https://github.com/marcosparreiras/lambda-search-products.git
 
 - DATABASE_URL
 
-4. CD into `scrapper` folder and install the dependencies:
+4. CD into `search` folder and install the dependencies:
 
 ```bash
 cd ./lambda-search-products/search && npm install
