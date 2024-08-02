@@ -17,6 +17,9 @@ Resources:
       CodeUri: search/
       Handler: app.lambdaHandler
       Runtime: nodejs20.x
+      Environment:
+        Variables:
+          DATABASE_URL:
       Architectures:
         - x86_64
       Events:

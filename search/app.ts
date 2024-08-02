@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { DbConnection, PgConnection } from './database/connection';
 import { z, ZodError } from 'zod';
@@ -12,7 +13,7 @@ export async function lambdaHandler(event: APIGatewayProxyEvent): Promise<APIGat
     try {
         const body = bodySchema.parse(JSON.parse(event.body as string));
 
-        const dbConnection: DbConnection = new PgConnection('URL_CONNECTION');
+        const dbConnection: DbConnection = new PgConnection(process.env.DATABASE_URL as string);
 
         const data = await dbConnection.query(
             `
@@ -34,7 +35,7 @@ export async function lambdaHandler(event: APIGatewayProxyEvent): Promise<APIGat
             INNER JOIN 
                 products AS p ON ph.product_id = p.code
             WHERE 
-                p.name ILIKE '%$3%'
+                p.name ILIKE '%' || $3 || '%'
             AND
                 (6371 * acos( 
                     cos(radians($1)) * cos(radians(s.latitude)) * 
@@ -47,7 +48,7 @@ export async function lambdaHandler(event: APIGatewayProxyEvent): Promise<APIGat
 
         const formatedData = {
             results: data.map((row) => ({
-                product: row['product_nam'],
+                product: row['product_name'],
                 supermarket: row['supermarket_nam'],
                 address: row['address'],
                 distance: row['distance'],
@@ -67,6 +68,7 @@ export async function lambdaHandler(event: APIGatewayProxyEvent): Promise<APIGat
                 body: JSON.stringify({ message: error.format() }),
             };
         }
+        console.log(error);
         return {
             statusCode: 500,
             body: JSON.stringify({ message: 'Internal server error' }),
